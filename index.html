@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nikal Technologies</title>
+    <link rel="icon" href="/imgs/nikal-logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        html { scroll-behavior: smooth; }
+
+        body { font-family: 'Inter', sans-serif; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in { animation: fadeIn 1s ease-out forwards; }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .in-view { animation: fadeInUp 0.8s ease-out forwards; }
+
+        .nav-scrolled {
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            background-color: rgba(250, 249, 246, 0.95);
+            backdrop-filter: blur(8px);
+        }
+
+        .gallery-progress-bar { transition: transform 5s linear; }
+        .gallery-progress-bar.active { transform: translateX(0%); }
+        .gallery-progress-bar.inactive { transform: translateX(-100%); transition: none; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-stone-50 to-amber-50">
+
+    <!-- Navigation -->
+    <nav id="main-nav" class="fixed top-0 w-full z-50 transition-all duration-300 bg-gradient-to-br from-stone-50 to-amber-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <img src="imgs/nikal-logo.png" alt="Nikal Technologies" class="h-24 w-auto cursor-pointer drop-shadow-sm" style="filter: contrast(1.2) brightness(0.9);" onclick="document.getElementById('hero').scrollIntoView({behavior: 'smooth'});">
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#services" class="text-stone-700 hover:text-[#044DA3] transition-colors">Services</a>
+                    <a href="#about" class="text-stone-700 hover:text-[#044DA3] transition-colors">About</a>
+                    <a href="#projects" class="text-stone-700 hover:text-[#044DA3] transition-colors">Our Projects</a>
+                    <a href="#gallery" class="text-stone-700 hover:text-[#044DA3] transition-colors">Gallery</a>
+                    <button class="contact-trigger text-stone-700 hover:text-[#044DA3] transition-colors">Contact</button>
+                    <button class="get-started-trigger bg-[#044DA3] hover:bg-blue-800 text-white px-4 py-2 rounded-md">Get Started</button>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="p-2 rounded-md text-gray-700 hover:text-gray-900 hover:bg-gray-100">
+                        <i data-lucide="menu" class="h-6 w-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gradient-to-br from-stone-50 to-amber-50 border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#services" class="mobile-nav-link block w-full text-left px-3 py-2 text-stone-700 hover:text-[#044DA3]">Services</a>
+                <a href="#about" class="mobile-nav-link block w-full text-left px-3 py-2 text-stone-700 hover:text-[#044DA3]">About</a>
+                <a href="/nikal-tracking" class="mobile-nav-link block px-3 py-2 text-stone-700 hover:text-[#044DA3]">Nikal Tracking</a>
+                <a href="#projects" class="mobile-nav-link block w-full text-left px-3 py-2 text-stone-700 hover:text-[#044DA3]">Our Projects</a>
+                <a href="#gallery" class="mobile-nav-link block w-full text-left px-3 py-2 text-stone-700 hover:text-[#044DA3]">Gallery</a>
+                <a href="/login" class="mobile-nav-link block px-3 py-2 text-stone-700 hover:text-[#044DA3]">Login</a>
+                <button class="contact-trigger mobile-nav-link block w-full text-left px-3 py-2 text-stone-700 hover:text-[#044DA3]">Contact</button>
+                <div class="px-3 py-2">
+                    <button class="get-started-trigger w-full bg-[#044DA3] hover:bg-blue-800 text-white px-4 py-2 rounded-md">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <img alt="Hero Background" src="imgs/islamic.jpeg" class="absolute inset-0 w-full h-full object-cover z-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-stone-900/50 to-amber-900/50"></div>
+
+        <div class="relative z-10 px-4 sm:px-6 lg:px-8 text-center">
+            <div class="animate-fade-in-up">
+                <div class="inline-block mb-6 bg-green-100 text-[#82B070] border border-green-200 px-3 py-1 rounded-full text-sm font-medium">
+                    Innovation • Sustainability • Excellence
+                </div>
+
+                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
+                    Transforming Tomorrow
+                    <span class="block text-[#044DA3]">Across Industries</span>
+                </h1>
+
+                <p class="text-xl md:text-2xl text-stone-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    From comprehensive project development and strategic financing to
+                    cutting-edge technology solutions, Nikal Technologies delivers
+                    excellence across three core expertise areas.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#services" class="inline-flex items-center justify-center bg-[#82B070] hover:bg-green-700 text-white px-8 py-3 rounded-md text-lg">
+                        Explore Our Services
+                        <i data-lucide="arrow-right" class="ml-2 h-5 w-5"></i>
+                    </a>
+                    <a href="#about" class="inline-flex items-center justify-center border border-white text-white hover:bg-white/10 px-8 py-3 rounded-md text-lg bg-transparent">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <a href="#services" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce hover:text-[#82B070] transition-colors">
+            <i data-lucide="chevron-down" class="h-6 w-6 text-stone-400"></i>
+        </a>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-20 bg-gradient-to-br from-stone-50 to-amber-50">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 opacity-0" data-observe>
+                <div class="inline-block mb-6 bg-green-100 text-[#82B070] border border-green-200 px-3 py-1 rounded-full text-sm font-medium">
+                    About Nikal Technologies
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-stone-900 mb-6">
+                    Driving Excellence Across Industries
+                </h2>
+                <p class="text-xl text-stone-600 max-w-5xl mx-auto leading-relaxed">
+                    At Nikal Technologies, we are a comprehensive solutions provider
+                    with deep expertise spanning three critical business domains. Our
+                    integrated approach combines strategic project development,
+                    innovative financing solutions, and cutting-edge technology to
+                    deliver exceptional results for our clients.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-16 opacity-0" data-observe style="animation-delay: 0.2s;">
+                <div>
+                    <h3 class="text-2xl md:text-3xl font-bold text-stone-900 mb-6">Our Mission</h3>
+                    <p class="text-lg text-stone-600 mb-6 leading-relaxed">
+                        To transform industries through innovative project development,
+                        strategic financial solutions, and advanced technology
+                        expertise. We bridge the gap between vision and reality,
+                        delivering sustainable value across renewable energy, real
+                        estate, mining, civil infrastructure, and digital transformation
+                        initiatives.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-[#82B070] rounded-full mt-2 flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-semibold text-stone-900">Comprehensive Development</h4>
+                                <p class="text-stone-600">End-to-end project execution from conception to completion across multiple sectors</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-[#82B070] rounded-full mt-2 flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-semibold text-stone-900">Strategic Financing</h4>
+                                <p class="text-stone-600">Innovative funding solutions including Sharia-compliant instruments and monetization strategies</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-2 h-2 bg-[#82B070] rounded-full mt-2 flex-shrink-0"></div>
+                            <div>
+                                <h4 class="font-semibold text-stone-900">Technology Innovation</h4>
+                                <p class="text-stone-600">Digital transformation services that drive efficiency and competitive advantage</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="bg-gradient-to-br from-green-100 to-lime-100 rounded-2xl p-8">
+                        <div class="grid grid-cols-2 gap-6 text-center">
+                            <div class="bg-white/80 rounded-xl p-6">
+                                <div class="text-3xl font-bold text-[#82B070] mb-2">5+</div>
+                                <div class="text-stone-700 text-sm">Years of Excellence</div>
+                            </div>
+                            <div class="bg-white/80 rounded-xl p-6">
+                                <div class="text-3xl font-bold text-[#82B070] mb-2">100+</div>
+                                <div class="text-stone-700 text-sm">Projects Delivered</div>
+                            </div>
+                            <div class="bg-white/80 rounded-xl p-6">
+                                <div class="text-3xl font-bold text-[#82B070] mb-2">$1B+</div>
+                                <div class="text-stone-700 text-sm">Financing Arranged</div>
+                            </div>
+                            <div class="bg-white/80 rounded-xl p-6">
+                                <div class="text-3xl font-bold text-[#82B070] mb-2">10+</div>
+                                <div class="text-stone-700 text-sm">Tech Solutions</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 md:p-12 shadow-lg opacity-0" data-observe style="animation-delay: 0.4s;">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl md:text-3xl font-bold text-stone-900 mb-4">Why Choose Nikal Technologies?</h3>
+                    <p class="text-lg text-stone-600 max-w-3xl mx-auto">
+                        Our unique combination of expertise, experience, and innovation sets us apart in delivering comprehensive solutions that drive sustainable growth and success.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="building-2" class="h-8 w-8 text-[#044DA3]"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-stone-900 mb-3">Integrated Approach</h4>
+                        <p class="text-stone-600">Seamlessly combining project development, financing, and technology to deliver holistic solutions.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="cpu" class="h-8 w-8 text-[#044DA3]"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-stone-900 mb-3">Innovation Focus</h4>
+                        <p class="text-stone-600">Leveraging cutting-edge technology and innovative financing to stay ahead of industry trends.</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="zap" class="h-8 w-8 text-[#044DA3]"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-stone-900 mb-3">Proven Results</h4>
+                        <p class="text-stone-600">Track record of successful project delivery across multiple industries and market conditions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 opacity-0" data-observe>
+                <h2 class="text-3xl md:text-5xl font-bold text-stone-900 mb-6">Three Pillars of Expertise</h2>
+                <p class="text-xl text-stone-600 max-w-4xl mx-auto">
+                    Discover how Nikal Technologies drives success through project development, strategic finance, and technology innovation.
+                </p>
+            </div>
+
+            <div id="services-grid" class="grid md:grid-cols-3 gap-8 mb-16"></div>
+
+            <div id="service-detail-view" class="bg-gradient-to-r from-stone-50 to-amber-50 rounded-2xl p-8 md:p-12" data-observe style="animation-delay: 0.5s;"></div>
+        </div>
+    </section>
+
+    <!-- Our Projects Section -->
+    <section id="projects" class="py-20 bg-stone-50 pb-20">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 opacity-0" data-observe>
+                <h2 class="text-3xl md:text-5xl font-bold text-stone-900 mb-6">Our Flagship Projects</h2>
+                <p class="text-xl text-stone-600 max-w-4xl mx-auto">
+                    From renewable energy to urban development, our projects are a testament to our commitment to innovation and excellence.
+                </p>
+            </div>
+
+            <div id="projects-grid" class="grid md:grid-cols-2 gap-8"></div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-white">
+        <div class="px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 opacity-0" data-observe>
+                <div class="inline-block mb-6 bg-green-100 text-[#82B070] border border-green-200 px-3 py-1 rounded-full text-sm font-medium">
+                    Visual Showcase
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-stone-900 mb-6">Project Gallery</h2>
+                <p class="text-xl text-stone-600 max-w-4xl mx-auto">
+                    A visual journey through our landmark projects and innovations, showcasing our commitment to excellence and a sustainable future.
+                </p>
+            </div>
+
+            <div class="md:grid md:grid-cols-2 md:gap-16 opacity-0" data-observe style="animation-delay: 0.2s;">
+                <div class="md:sticky md:top-24 h-fit">
+                    <div id="gallery-image-container" class="relative w-full aspect-square rounded-2xl overflow-hidden shadow-2xl"></div>
+                </div>
+                <div id="gallery-project-list" class="mt-12 md:mt-0">
+                    <div class="space-y-16"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="col-span-2">
+                    <img src="imgs/nikal-logo.png" alt="Nikal Technologies" class="h-12 w-auto mb-4 brightness-0 invert cursor-pointer" onclick="document.getElementById('hero').scrollIntoView({behavior: 'smooth'});">
+                    <p class="text-stone-400 mb-4">
+                        Delivering excellence through comprehensive project development, strategic financing solutions, and cutting-edge technology expertise.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Services</h4>
+                    <ul class="space-y-2 text-stone-400">
+                        <li><a href="#services" data-service-index="0" class="service-explore-link hover:text-[#044DA3] transition-colors">Project Development</a></li>
+                        <li><a href="#services" data-service-index="1" class="service-explore-link hover:text-[#044DA3] transition-colors">Project Finance</a></li>
+                        <li><a href="#services" data-service-index="2" class="service-explore-link hover:text-[#044DA3] transition-colors">Technology Expertise</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-stone-400">
+                        <li>
+                            <button class="contact-trigger hover:text-[#044DA3] transition-colors flex items-center">
+                                <i data-lucide="mail" class="h-4 w-4 mr-2"></i>
+                                info@nikaltechnologies.com
+                            </button>
+                        </li>
+                        <li>
+                            <a href="tel:+254722105108" class="hover:text-[#044DA3] transition-colors flex items-center">
+                                <i data-lucide="phone" class="h-4 w-4 mr-2"></i>
+                                +254 722 105 108
+                            </a>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="map-pin" class="h-4 w-4 mr-2 mt-1 flex-shrink-0"></i>
+                            <span>Highway Heights, Marcus Garvey Road, Nairobi</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-stone-800 mt-8 pt-8 text-center text-stone-400">
+                <p>&copy; 2024 Nikal Technologies. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal-overlay hidden">
+        <div class="modal-content w-full" style="max-width:500px;">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-stone-900">Get In Touch</h2>
+                <button class="close-modal-button p-1 rounded-full hover:bg-gray-200">
+                    <i data-lucide="x" class="h-6 w-6 text-gray-600"></i>
+                </button>
+            </div>
+            <form id="contact-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <input type="text" id="firstName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <input type="text" id="lastName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="tel" id="phone" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="service" class="block text-sm font-medium text-gray-700">Service Interest</label>
+                    <select id="service" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select a service</option>
+                        <option value="Project Development">Project Development</option>
+                        <option value="Project Finance">Project Finance</option>
+                        <option value="Technology Expertise">Technology Expertise</option>
+                        <option value="Multiple Services">Multiple Services</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                    <textarea id="message" rows="4" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-[#044DA3] hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-md">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Consultation Modal -->
+    <div id="consultation-modal" class="modal-overlay hidden">
+        <div class="modal-content w-full" style="max-width:500px;">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-stone-900 flex items-center">
+                    <i data-lucide="calendar" class="mr-2 h-6 w-6"></i>Schedule Consultation
+                </h2>
+                <button class="close-modal-button p-1 rounded-full hover:bg-gray-200">
+                    <i data-lucide="x" class="h-6 w-6 text-gray-600"></i>
+                </button>
+            </div>
+            <form id="consultation-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="consultFirstName" class="block text-sm font-medium text-gray-700">First Name</label>
+                        <input type="text" id="consultFirstName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="consultLastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+                        <input type="text" id="consultLastName" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label for="consultEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="consultEmail" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="consultPhone" class="block text-sm font-medium text-gray-700">Phone</label>
+                    <input type="tel" id="consultPhone" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="consultService" class="block text-sm font-medium text-gray-700">Service Area</label>
+                    <select id="consultService" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select service area</option>
+                        <option value="development">Project Development</option>
+                        <option value="finance">Project Finance</option>
+                        <option value="technology">Technology Expertise</option>
+                        <option value="multiple">Multiple Services</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="consultDate" class="block text-sm font-medium text-gray-700">Preferred Date</label>
+                    <input type="date" id="consultDate" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="consultTime" class="block text-sm font-medium text-gray-700">Preferred Time</label>
+                    <select id="consultTime" class="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select time</option>
+                        <option value="9am">9:00 AM</option>
+                        <option value="10am">10:00 AM</option>
+                        <option value="11am">11:00 AM</option>
+                        <option value="2pm">2:00 PM</option>
+                        <option value="3pm">3:00 PM</option>
+                        <option value="4pm">4:00 PM</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="consultMessage" class="block text-sm font-medium text-gray-700">Brief Description</label>
+                    <textarea id="consultMessage" rows="3" placeholder="Tell us about your project..." class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-[#044DA3] hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-md">Schedule Consultation</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Project Details Modal -->
+    <div id="project-details-modal" class="modal-overlay hidden">
+        <div id="project-details-content" class="modal-content w-full" style="max-width:768px;"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const services = [
+                {
+                    id: "development",
+                    title: "Project Development",
+                    subtitle: "Comprehensive Development Solutions",
+                    description: "End-to-end project development across renewable energy, real estate, mining, and civil infrastructure with expertise in planning, execution, and delivery.",
+                    icon: "building-2",
+                    secondaryIcons: ["zap", "home"],
+                    color: "from-green-100 to-lime-100",
+                    features: ["Renewable Energy Projects","Real Estate Development","Mining Operations","Civil Works & Infrastructure"],
+                },
+                {
+                    id: "finance",
+                    title: "Project Finance",
+                    subtitle: "Strategic Financial Solutions",
+                    description: "Comprehensive project financing solutions including funding arrangements, monetization strategies, and Sharia-compliant banking instruments for diverse project needs.",
+                    icon: "cpu",
+                    secondaryIcons: ["arrow-right", "building-2"],
+                    color: "from-blue-100 to-sky-100",
+                    features: ["Project Funding","Monetization Strategies","Sharia Compliant Banking","Financial Structuring"],
+                },
+                {
+                    id: "technology",
+                    title: "Technology Expertise",
+                    subtitle: "Digital Innovation & Solutions",
+                    description: "Cutting-edge software development, cloud solutions, and digital transformation services that drive innovation and efficiency across all industries.",
+                    icon: "code-2",
+                    secondaryIcons: ["cloud", "cpu"],
+                    color: "from-gray-100 to-slate-100",
+                    features: ["Custom Software Development","Cloud Infrastructure","Digital Transformation","Innovation Consulting"],
+                },
+            ];
+
+            const ourProjects = [
+                {
+                    title: "Wind Turbine Project",
+                    description: "Imagine a future powered by the wind. At Nikal Technologies, we're making that a reality. We specialize in developing state-of-the-art wind turbine farms that not only generate clean, renewable energy but also stand as monuments to a sustainable future. From site selection and feasibility studies to construction and grid integration, we manage every aspect to ensure our projects deliver reliable power and a greener tomorrow for communities.",
+                    images: ["imgs/windturbine.jpeg","imgs/windturbine2.jpeg","imgs/windturbine3.jpeg"],
+                    tags: ["Renewable Energy", "Sustainability", "Innovation"],
+                    icon: "wind",
+                },
+                {
+                    title: "Renewable Energy Solutions for Solar powered water pumps and systems",
+                    description: "We provide innovative renewable energy solutions focused on solar-powered water pumps and systems. These systems are designed to support sustainable agriculture, provide clean drinking water to remote communities, and reduce reliance on fossil fuels for water management.",
+                    images: ["imgs/hydro-dam1.jpeg","imgs/hydro-dam2.jpeg","imgs/hydro-dam3.jpeg"],
+                    tags: ["Solar Water Pumps", "Sustainable Agriculture", "Clean Water Access"],
+                    icon: "zap",
+                },
+                {
+                    title: "Advanced Solar Technology Partnership",
+                    description: "Through strategic partnerships with leading global manufacturers, we bring the most advanced solar technologies to our projects. This includes next-generation bifacial panels, innovative energy storage solutions, and AI-driven performance optimization.",
+                    images: ["imgs/solar-tech1.jpeg","imgs/solar-tech2.jpeg","imgs/solar-tech3.jpeg"],
+                    tags: ["Solar Power", "Partnership", "Technology"],
+                    icon: "handshake",
+                },
+                {
+                    title: "Solar Panel Project",
+                    description: "Sprawling across sun-drenched landscapes, our solar farms are more than just panels; they are powerhouses of innovation. We deploy vast arrays of high-efficiency solar technology, optimized and maintained using advanced aerial drone monitoring.",
+                    images: ["imgs/solarpanel.jpeg","imgs/solarpanel2.jpeg","imgs/solarpanel3.jpeg"],
+                    tags: ["Solar Power", "Clean Energy", "Technology"],
+                    icon: "zap",
+                },
+                {
+                    title: "Orchard Farming",
+                    description: "Step into the future of agriculture with our tech-infused orchard farming projects. We cultivate acres of vibrant, healthy fruit trees, integrating smart irrigation, drone-based health monitoring, and data analytics to create sustainable ecosystems that boost crop yields and conserve resources.",
+                    images: ["imgs/orchard.jpeg","imgs/orchard2.jpeg","imgs/orchard3.jpeg"],
+                    tags: ["Agriculture", "Food Security", "Technology"],
+                    icon: "leaf",
+                },
+                {
+                    title: "Islamic City Development",
+                    description: "We are honored to be at the helm of developing a visionary Islamic city. This ambitious project is a beautiful fusion of timeless cultural heritage and cutting-edge smart city infrastructure, creating a thriving, sustainable community that respects tradition while embracing the future.",
+                    images: ["imgs/islamic-city.jpeg","imgs/islamic-city2.jpeg","imgs/islamic-city3.jpeg"],
+                    tags: ["Real Estate", "Urban Development", "Smart City"],
+                    icon: "landmark",
+                },
+            ];
+
+            let activeServiceIndex = 0;
+            let activeGalleryIndex = 0;
+            let galleryImageIndex = 0;
+            let galleryInterval;
+
+            const mainNav = document.getElementById('main-nav');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const servicesGrid = document.getElementById('services-grid');
+            const serviceDetailView = document.getElementById('service-detail-view');
+            const projectsGrid = document.getElementById('projects-grid');
+            const galleryImageContainer = document.getElementById('gallery-image-container');
+            const galleryProjectList = document.getElementById('gallery-project-list');
+            const contactModal = document.getElementById('contact-modal');
+            const consultationModal = document.getElementById('consultation-modal');
+            const projectDetailsModal = document.getElementById('project-details-modal');
+            const projectDetailsContent = document.getElementById('project-details-content');
+
+            function renderServices() {
+                servicesGrid.innerHTML = services.map((service, index) => `
+                    <div class="service-card cursor-pointer transition-all duration-500 hover:shadow-2xl border-0 bg-gradient-to-br ${service.color} ${activeServiceIndex === index ? 'ring-2 ring-[#82B070] shadow-2xl' : ''} rounded-lg" data-index="${index}">
+                        <div class="p-8">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="p-3 bg-white/80 rounded-xl">
+                                    <i data-lucide="${service.icon}" class="h-8 w-8 text-stone-700"></i>
+                                </div>
+                                <div class="flex space-x-2">
+                                    ${service.secondaryIcons.map(icon => `<i data-lucide="${icon}" class="h-5 w-5 text-stone-500"></i>`).join('')}
+                                </div>
+                            </div>
+                            <h3 class="text-2xl font-bold text-stone-900 mb-2">${service.title}</h3>
+                            <p class="text-stone-600 mb-4 font-medium">${service.subtitle}</p>
+                            <p class="text-stone-600 mb-6 leading-relaxed">${service.description}</p>
+                            <button class="explore-service-btn w-full border border-gray-300 rounded-md py-2 px-4 hover:bg-[#044DA3] hover:text-white hover:border-[#044DA3] transition-all duration-300" data-service-title="${service.title}">
+                                Explore ${service.title} <i data-lucide="arrow-right" class="inline-block ml-2 h-4 w-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                renderServiceDetail();
+                addServiceCardListeners();
+                lucide.createIcons();
+            }
+
+            function renderServiceDetail() {
+                const service = services[activeServiceIndex];
+                serviceDetailView.innerHTML = `
+                    <div class="grid md:grid-cols-2 gap-12 items-center">
+                        <div>
+                            <div class="inline-block mb-4 bg-blue-100 text-[#044DA3] px-3 py-1 rounded-full text-sm">Featured Service</div>
+                            <h3 class="text-3xl md:text-4xl font-bold text-stone-900 mb-4">${service.title}</h3>
+                            <p class="text-xl text-stone-600 mb-6">${service.description}</p>
+                            <div class="grid grid-cols-2 gap-4 mb-8">
+                                ${service.features.map(feature => `
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-2 h-2 bg-[#044DA3] rounded-full"></div>
+                                        <span class="text-stone-700">${feature}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button class="learn-more-btn bg-[#044DA3] hover:bg-blue-800 text-white py-2 px-4 rounded-md" data-service-title="${service.title}">
+                                Learn More About ${service.title} <i data-lucide="arrow-right" class="inline-block ml-2 h-4 w-4"></i>
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <div class="aspect-square rounded-2xl bg-gradient-to-br ${service.color} p-8 flex items-center justify-center">
+                                <div class="text-center">
+                                    <i data-lucide="${service.icon}" class="h-24 w-24 text-stone-700 mx-auto mb-4"></i>
+                                    <div class="flex justify-center space-x-4">
+                                        ${service.secondaryIcons.map(icon => `<i data-lucide="${icon}" class="h-12 w-12 text-stone-500"></i>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                lucide.createIcons();
+                document.querySelectorAll('.learn-more-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        document.getElementById('service').value = e.currentTarget.dataset.serviceTitle;
+                        openModal(contactModal);
+                    });
+                });
+            }
+
+            function renderProjects() {
+                projectsGrid.innerHTML = ourProjects.map((project, index) => `
+                    <div class="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 flex flex-col bg-white rounded-lg">
+                        <div>
+                            <img src="${project.images[0]}" alt="${project.title}" class="rounded-t-lg object-cover w-full h-64">
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${project.tags.map(tag => `<span class="bg-gray-200 text-gray-700 px-2 py-1 text-xs font-semibold rounded-full">${tag}</span>`).join('')}
+                            </div>
+                            <h3 class="text-xl font-bold text-stone-900 mb-2">${project.title}</h3>
+                            <p class="text-stone-600 mb-4 flex-grow">${project.description.substring(0, 120)}...</p>
+                            <button class="project-details-trigger mt-auto bg-[#82B070] hover:bg-green-700 text-white py-2 px-4 rounded-md" data-index="${index}">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.querySelectorAll('.project-details-trigger').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        openProjectDetailsModal(ourProjects[parseInt(e.currentTarget.dataset.index)]);
+                    });
+                });
+            }
+
+            function renderGallery() {
+                renderGalleryImage();
+                galleryProjectList.querySelector('.space-y-16').innerHTML = ourProjects.map((project, index) => `
+                    <div class="gallery-project-item p-6 rounded-xl transition-all duration-300 cursor-pointer ${activeGalleryIndex === index ? 'bg-stone-100 shadow-md' : ''}" data-index="${index}">
+                        <div class="flex items-center mb-4">
+                            <i data-lucide="${project.icon}" class="h-8 w-8 text-[#044DA3] mr-4"></i>
+                            <h3 class="text-2xl font-bold text-stone-800">${project.title}</h3>
+                        </div>
+                        <p class="text-stone-600 leading-relaxed">${project.description.substring(0, 150)}...</p>
+                    </div>
+                `).join('');
+
+                document.querySelectorAll('.gallery-project-item').forEach(item => {
+                    item.addEventListener('mouseenter', (e) => {
+                        activeGalleryIndex = parseInt(e.currentTarget.dataset.index);
+                        galleryImageIndex = 0;
+                        renderGalleryImage();
+                        resetGalleryInterval();
+                        document.querySelectorAll('.gallery-project-item').forEach((el, i) => {
+                            el.classList.toggle('bg-stone-100', i === activeGalleryIndex);
+                            el.classList.toggle('shadow-md', i === activeGalleryIndex);
+                        });
+                    });
+                });
+
+                lucide.createIcons();
+            }
+
+            function renderGalleryImage() {
+                const project = ourProjects[activeGalleryIndex];
+                if (!project) return;
+                galleryImageContainer.innerHTML = `
+                    ${project.images.map((image, imgIndex) => `
+                        <img src="${image}" alt="${project.title}" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ease-in-out ${galleryImageIndex === imgIndex ? 'opacity-100' : 'opacity-0'}">
+                    `).join("")}
+                    <div class="absolute bottom-4 left-4 right-4 flex space-x-2">
+                        ${project.images.map((_, imgIndex) => `
+                            <div class="flex-1 h-1 bg-white/30 rounded-full overflow-hidden">
+                                <div class="h-full bg-white gallery-progress-bar ${galleryImageIndex === imgIndex ? 'active' : 'inactive'}"></div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            function resetGalleryInterval() {
+                clearInterval(galleryInterval);
+                galleryInterval = setInterval(() => {
+                    const project = ourProjects[activeGalleryIndex];
+                    galleryImageIndex = (galleryImageIndex + 1) % (project ? project.images.length : 1);
+                    renderGalleryImage();
+                }, 5000);
+            }
+
+            function openModal(modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal(modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+
+            function openProjectDetailsModal(project) {
+                projectDetailsContent.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                ${project.tags.map(tag => `<span class="bg-green-100 text-[#82B070] border border-green-200 px-2 py-1 text-xs font-semibold rounded-full">${tag}</span>`).join('')}
+                            </div>
+                            <h2 class="text-2xl font-bold text-[#82B070]">${project.title}</h2>
+                        </div>
+                        <button class="close-modal-button p-1 rounded-full hover:bg-gray-200 -mt-2 -mr-2">
+                            <i data-lucide="x" class="h-6 w-6 text-gray-600"></i>
+                        </button>
+                    </div>
+                    <img src="${project.images[0]}" alt="${project.title}" class="rounded-lg object-cover w-full my-4">
+                    <p class="text-stone-600 py-4">${project.description}</p>
+                `;
+                lucide.createIcons();
+                projectDetailsContent.querySelector('.close-modal-button').addEventListener('click', () => closeModal(projectDetailsModal));
+                openModal(projectDetailsModal);
+            }
+
+            function addServiceCardListeners() {
+                document.querySelectorAll('.service-card').forEach(card => {
+                    card.addEventListener('click', (e) => {
+                        const index = parseInt(card.dataset.index);
+                        if (activeServiceIndex !== index) {
+                            activeServiceIndex = index;
+                            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('ring-2', 'ring-[#82B070]', 'shadow-2xl'));
+                            card.classList.add('ring-2', 'ring-[#82B070]', 'shadow-2xl');
+                            renderServiceDetail();
+                        }
+                    });
+                });
+                document.querySelectorAll('.explore-service-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        document.getElementById('service').value = e.currentTarget.dataset.serviceTitle;
+                        openModal(contactModal);
+                    });
+                });
+            }
+
+            window.addEventListener('scroll', () => {
+                mainNav.classList.toggle('nav-scrolled', window.scrollY > 50);
+            });
+
+            mobileMenuButton.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                mobileMenuButton.innerHTML = isHidden
+                    ? '<i data-lucide="menu" class="h-6 w-6"></i>'
+                    : '<i data-lucide="x" class="h-6 w-6"></i>';
+                lucide.createIcons();
+            });
+
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenuButton.innerHTML = '<i data-lucide="menu" class="h-6 w-6"></i>';
+                        lucide.createIcons();
+                    }
+                });
+            });
+
+            document.querySelectorAll('.service-explore-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    activeServiceIndex = parseInt(e.currentTarget.dataset.serviceIndex);
+                    renderServices();
+                    document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
+                });
+            });
+
+            document.querySelectorAll('.get-started-trigger, .contact-trigger').forEach(el => {
+                el.addEventListener('click', () => openModal(contactModal));
+            });
+
+            document.querySelectorAll('.modal-overlay').forEach(overlay => {
+                overlay.addEventListener('click', (e) => {
+                    if (e.target === overlay) closeModal(overlay);
+                });
+            });
+
+            document.querySelectorAll('.close-modal-button').forEach(button => {
+                button.addEventListener('click', () => closeModal(button.closest('.modal-overlay')));
+            });
+
+            document.getElementById('contact-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert("Thank you for your message! We'll get back to you soon.");
+                closeModal(contactModal);
+                e.target.reset();
+            });
+
+            document.getElementById('consultation-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert("Thank you for your consultation request! We'll get back to you soon.");
+                closeModal(consultationModal);
+                e.target.reset();
+            });
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('in-view');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('[data-observe]').forEach(el => observer.observe(el));
+
+            renderServices();
+            renderProjects();
+            renderGallery();
+            resetGalleryInterval();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
