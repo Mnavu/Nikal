@@ -194,7 +194,7 @@
                 <div class="text-sage-200 text-sm">Country offices across East Africa</div>
             </div>
             <div>
-                <div class="font-serif text-4xl md:text-5xl mb-2"><span id="mw-total">440+</span><span class="text-2xl md:text-3xl"> MW</span></div>
+                <div class="font-serif text-4xl md:text-5xl mb-2"><span id="mw-total">310+</span><span class="text-2xl md:text-3xl"> MW</span></div>
                 <div class="text-sage-200 text-sm">Power generation capacity under mandate</div>
             </div>
             <div>
@@ -683,18 +683,6 @@
                     description: "A run-of-river small hydropower project on the Muvumbe River in Kabale District, currently in the EPC procurement and Expression of Interest (EOI) stage.",
                 },
                 {
-                    id: "mrm",
-                    title: "Mutukula Regional Market (MRM)",
-                    countries: ["Uganda"],
-                    location: "Mutukula, Uganda",
-                    category: "infrastructure",
-                    icon: "store",
-                    status: "Mandate secured",
-                    isNew: true,
-                    role: "Authorised Contractor Identification and Sourcing Representative",
-                    description: "Nikal Technologies has been formally appointed as the Authorised Contractor Identification and Sourcing Representative for Mutukula Regional Market, East Africa's leading market solution project.",
-                },
-                {
                     id: "esports",
                     title: "Uganda National Esports Centre & Skills Academies",
                     countries: ["Uganda"],
@@ -766,48 +754,36 @@
                     description: "A 40 MW solar power project in Soin, Uasin Gishu County.",
                 },
                 {
-                    id: "kona-baridi",
-                    title: "Kona Baridi Power Plant",
-                    capacity: "40 MW",
+                    id: "tindinyo-falls",
+                    title: "Tindinyo Falls Small Hydropower Project",
+                    capacity: "2.4 MW",
                     countries: ["Kenya"],
-                    location: "Kona Baridi, Ngong",
-                    category: "energy",
-                    icon: "zap",
-                    status: "Development pipeline",
-                    description: "A 40 MW power plant in Kona Baridi, Ngong.",
-                },
-                {
-                    id: "ngong-wind",
-                    title: "Ngong Wind Power Plant",
-                    capacity: "40 MW",
-                    countries: ["Kenya"],
-                    location: "Ngong",
-                    category: "energy",
-                    icon: "wind",
-                    status: "Development pipeline",
-                    description: "A 40 MW wind power plant in Ngong.",
-                },
-                {
-                    id: "kericho-hydro",
-                    title: "Kericho Hydro Power Plant",
-                    capacity: "10 MW",
-                    countries: ["Kenya"],
-                    location: "Kericho",
+                    location: "Yala River, Nandi County",
                     category: "energy",
                     icon: "waves",
                     status: "Development pipeline",
-                    description: "A 10 MW hydro power plant in Kericho.",
+                    description: "Located on the Yala River in Nandi County, Kenya, the Tindinyo Falls project is a 2.4 MW run-of-river small hydropower plant. The project is designed to harness the natural flow of the Yala River to generate clean, baseload renewable energy for the national grid, reinforcing the region's sustainable energy infrastructure while maintaining a minimal environmental footprint.",
                 },
                 {
-                    id: "kericho-tea",
-                    title: "Kericho Tea Zones Power Plant",
-                    capacity: "40 MW",
-                    countries: ["Kenya"],
-                    location: "Kericho tea zones",
+                    id: "hydrokinetic-grid",
+                    title: "Utility-Scale Hydrokinetic Grid Power Generation",
+                    countries: ["Regional"],
                     category: "energy",
-                    icon: "zap",
+                    icon: "waves",
                     status: "Development pipeline",
-                    description: "A 40 MW power plant in the Kericho tea zones.",
+                    isNew: true,
+                    description: "An innovative run-of-river renewable energy initiative deploying advanced in-stream hydrokinetic turbine systems. By harnessing the natural kinetic energy of continuous river currents without the need for large-scale dam infrastructure, this project generates reliable, zero-emission baseload power for the national grid, minimizing ecological disruption while maximizing continuous energy yield.",
+                },
+                {
+                    id: "hydrokinetic-data-center",
+                    title: "Integrated Hydrokinetic Power & Data Center Cooling Infrastructure",
+                    countries: ["Regional"],
+                    category: "technology",
+                    icon: "server",
+                    status: "Development pipeline",
+                    isNew: true,
+                    description: "A pioneering green technology project combining data center operations with hydrokinetic power generation. This facility utilizes flowing water currents to generate dedicated, off-grid baseload electricity for high-performance computing and AI workloads. Simultaneously, the system leverages the continuous water flow for highly efficient, natural liquid chilling processes, drastically reducing the thermal footprint and operational energy costs of the data center.",
+                    highlights: ["Off-grid hydrokinetic baseload power", "High-performance computing & AI workloads", "Natural liquid chilling from river flow", "Reduced thermal footprint & energy costs"],
                 },
                 {
                     id: "somalia-solar",
@@ -842,13 +818,15 @@
                 },
                 {
                     id: "mindvolution",
-                    title: "MindVolution eCitizen Joint Venture",
-                    countries: ["Kenya"],
-                    location: "Government of Kenya",
+                    title: "Mindvolution Joint Venture: AI-Driven Cybersecurity for National e-Government Platforms",
+                    countries: ["Regional"],
+                    location: "National e-government platforms across Africa",
                     category: "technology",
                     icon: "shield-check",
                     status: "Joint venture",
-                    description: "Proprietary AI systems and global cybersecurity integrations for the Government of Kenya.",
+                    role: "Strategic partnership with Italian cybersecurity firm Mindvolution Srl",
+                    description: "In a strategic partnership with Italian cybersecurity firm Mindvolution Srl, Nikal Technologies is co-developing comprehensive AI-powered cybersecurity and system-integrity solutions for national e-government and public service platforms across Africa. This joint venture leverages Mindvolution's proprietary Network Detection and Response (NDR) systems and behavioral analytics to deliver predictive threat detection, autonomous incident response, and compliance automation. By combining Mindvolution's advanced AI defense technology with Nikal's regional implementation expertise, the partnership provides highly secure, resilient, and sovereign digital infrastructures for national governments.",
+                    highlights: ["Network Detection & Response (NDR)", "Behavioral analytics", "Predictive threat detection", "Autonomous incident response", "Compliance automation"],
                 },
                 {
                     id: "golden-palms",
@@ -1255,7 +1233,6 @@
             document.querySelectorAll('[data-observe]').forEach(el => observer.observe(el));
 
             document.getElementById('year').textContent = new Date().getFullYear();
-            document.getElementById('project-count').textContent = `${projects.length}+`;
             const totalMw = projects.reduce((sum, p) => sum + (p.capacity ? parseFloat(p.capacity) : 0), 0);
             document.getElementById('mw-total').textContent = `${Math.floor(totalMw / 10) * 10}+`;
 
